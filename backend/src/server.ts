@@ -20,11 +20,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json({ limit: "20mb" }));
 
-app.use(AuthGuard);
-app.get("/", (req, res, next) => {
-  res.send("<h2>Learning Management System</h2>");
-  next();
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "OK" });
 });
+
+// Auth middleware
+app.use(AuthGuard);
 
 app.use("/user", userRouter);
 app.use("/role", roleRouter);

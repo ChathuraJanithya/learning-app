@@ -72,7 +72,6 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     }
 
     const userData = {
-      id: existingUser._id.toString(),
       email: existingUser.email,
       role: (existingUser.role as any).roleName,
       name: `${existingUser.firstName} ${existingUser.lastName}`,

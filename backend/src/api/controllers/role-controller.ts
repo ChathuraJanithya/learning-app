@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Role, { IRole } from "@/api/models/role-model"; // Assuming you export IRole interface
-import logger from "../../utils/logger";
+import logger from "@/utils/logger";
 
 export const addRole = async (
   req: Request,
@@ -19,7 +19,9 @@ export const addRole = async (
 
     await role.save();
 
-    return res.status(201).json(role);
+    return res.status(201).json({
+      message: "Role created successfully",
+    });
   } catch (error: unknown) {
     logger.error(error);
     return res.status(500).json({ error: "Could not add role" });
