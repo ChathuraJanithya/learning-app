@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Role, { IRole } from "@/api/models/role-model"; // Assuming you export IRole interface
+import Role, { IRole } from "@/api/models/role-model";
 import logger from "@/utils/logger";
 
 export const addRole = async (
