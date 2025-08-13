@@ -4,12 +4,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import logger from "../../utils/logger";
 
-interface JwtPayload {
-  id: string;
-  email?: string;
-  role?: any;
-}
-
 export const signup = async (
   req: Request,
   res: Response

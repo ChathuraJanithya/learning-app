@@ -1,11 +1,19 @@
 import { Request, Response } from "express";
-import Course from "../models/course-model";
+import Course from "@/api/models/course-model";
+import { AuthRequest } from "@/interfaces";
 
-export const createCourse = async (req: Request, res: Response) => {
+export const createCourse = async (req: AuthRequest, res: Response) => {
   try {
     const course = new Course(req.body);
+    //only instructors can create courses
+
+    if (req.role !== "instructor") {
+      return res.status(403).json({ error: "Access denied" });
+    }
     await course.save();
-    res.status(201).json(course);
+    res
+      .status(201)
+      .json({ message: "Course created successfully", data: course });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
@@ -15,14 +23,19 @@ export const createCourse = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteCourse = async (req: Request, res: Response) => {
+export const deleteCourse = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
+    //only instructors can delete courses
+    //@ts-ignore
+    if (req.role !== "instructor") {
+      return res.status(403).json({ error: "Access denied" });
+    }
     const course = await Course.findByIdAndDelete(id);
     if (!course) {
       return res.status(404).json({ error: "Course not found" });
     }
-    res.status(204).send();
+    res.status(200).json({ message: "Delete successful", data: "" });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
@@ -32,11 +45,34 @@ export const deleteCourse = async (req: Request, res: Response) => {
   }
 };
 
-export const getCourseByInstructorId = async (req: Request, res: Response) => {
+export const getCourseByInstructorId = async (
+  req: AuthRequest,
+  res: Response
+) => {
   try {
     const { instructorId } = req.params;
-    const courses = await Course.find({ instructor: instructorId });
-    res.status(200).json(courses);
+
+    // Determine instructorId: either param or authenticated user
+    const resolvedInstructorId = instructorId || req.user;
+
+    if (!resolvedInstructorId) {
+      return res.status(400).json({ error: "Instructor ID not provided" });
+    }
+
+    // Authorization: only allow instructors to see their own courses if no param
+    if (!instructorId && req.role !== "instructor") {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const courses = await Course.find({ instructor: resolvedInstructorId });
+    const count = await Course.countDocuments({
+      instructor: resolvedInstructorId,
+    });
+    res.status(200).json({
+      data: courses,
+      count: count,
+      message: "Courses retrieved successfully",
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
@@ -46,10 +82,15 @@ export const getCourseByInstructorId = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllCourses = async (req: Request, res: Response) => {
+export const getAllCourses = async (req: AuthRequest, res: Response) => {
   try {
     const courses = await Course.find();
-    res.status(200).json(courses);
+    const count = await Course.countDocuments();
+    res.status(200).json({
+      data: courses,
+      count: count,
+      message: "All courses retrieved successfully",
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });

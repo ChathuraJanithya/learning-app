@@ -5,7 +5,7 @@ interface ICourse extends Document {
   description: string;
   duration: number;
   content: string;
-  instructor: mongoose.Schema.Types.ObjectId | string;
+  instructor: mongoose.Schema.Types.ObjectId;
   createdAt: Date;
 }
 

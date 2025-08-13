@@ -2,14 +2,14 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IEnrolledCourse extends Document {
   user: mongoose.Schema.Types.ObjectId | string;
-  course: mongoose.Schema.Types.ObjectId | string;
+  courses: mongoose.Schema.Types.ObjectId[];
   enrolledAt: Date;
 }
 
 const enrolledCourseSchema: Schema<IEnrolledCourse> = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  course: {
-    type: mongoose.Schema.Types.ObjectId,
+  courses: {
+    type: [mongoose.Schema.Types.ObjectId],
     ref: "Course",
     required: true,
   },

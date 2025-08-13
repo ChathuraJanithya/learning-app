@@ -35,7 +35,6 @@ export const AuthGuard = (
       return res.status(403).json({ message: "Invalid token" });
     }
 
-    // decoded can be string or JwtPayload — narrow type here
     const payload = decoded as JwtPayload & {
       id?: string;
       role?: { roleName: string };

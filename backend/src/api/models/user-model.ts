@@ -7,7 +7,7 @@ interface IUser extends Document {
   contact: string;
   email: string;
   password: string;
-  role: mongoose.Schema.Types.ObjectId | string;
+  role: mongoose.Schema.Types.ObjectId;
 
   matchPassword(enteredPassword: string): Promise<boolean>;
 }
