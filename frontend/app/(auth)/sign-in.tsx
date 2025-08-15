@@ -11,23 +11,30 @@ import {
 import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Link } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/auth-service";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
-  const handleLogin = async () => {
-    setIsLoading(true);
-    // Add your login logic here
-    setTimeout(() => {
-      setIsLoading(false);
-      // Navigate to the next screen or show an error message
-      //@ts-ignore
+  const { mutate: loginMutation, isPending: isLoading } = useMutation({
+    mutationFn: () => login({ email, password }),
+    onSuccess: (data) => {
+      // Handle successful login
+      console.log("Login successful:", data);
       navigation.navigate("(tabs)");
-    }, 2000);
+    },
+    onError: (error) => {
+      // Handle login error
+      console.error("Login failed:", error);
+    },
+  });
+
+  const handleLogin = async () => {
+    loginMutation();
   };
 
   return (

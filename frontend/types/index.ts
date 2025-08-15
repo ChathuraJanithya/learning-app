@@ -1,0 +1,21 @@
+type BaseUser = {
+  email: string;
+};
+
+export type LoggingUser = BaseUser & {
+  password: string;
+  // Add other properties specific to logged-in users
+};
+
+export type SignUpUser = BaseUser & {
+  firstName: string;
+  lastName: string;
+  contact: string;
+  role: "student" | "instructor";
+  password: string;
+};
+
+export type LoggedInUser = BaseUser & {
+  role: "student" | "instructor";
+  name: string;
+};
