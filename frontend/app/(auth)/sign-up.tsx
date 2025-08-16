@@ -5,9 +5,7 @@ import { z } from "zod";
 import {
   Eye,
   EyeOff,
-  Mail,
   Lock,
-  Phone,
   ChevronDown,
   UserCheck,
   GraduationCap,
@@ -24,29 +22,23 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import InputField from "@/components/ui/InputField";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
+
+import { SignUpUser } from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { AuthService } from "@/services/auth-service";
 
 // Zod validation schema
 const signupSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, "First name must be at least 2 characters")
-    .max(50, "First name must be less than 50 characters")
-    .regex(/^[a-zA-Z\s]+$/, "First name can only contain letters"),
-  lastName: z
-    .string()
-    .min(2, "Last name must be at least 2 characters")
-    .max(50, "Last name must be less than 50 characters")
-    .regex(/^[a-zA-Z\s]+$/, "Last name can only contain letters"),
+  firstName: z.string(),
+  lastName: z.string(),
   contact: z
     .string()
     .min(10, "Contact number must be at least 10 digits")
     .max(15, "Contact number must be less than 15 digits")
     .regex(/^\+?[\d\s-()]+$/, "Please enter a valid phone number"),
-  email: z
-    .string()
-    .email("Please enter a valid email address")
-    .min(5, "Email must be at least 5 characters")
-    .max(255, "Email must be less than 255 characters"),
+  email: z.string().email("Please enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   role: z
     .string()
@@ -71,14 +63,16 @@ const roleOptions = [
 ];
 
 export default function SignUp() {
+  const router = useRouter();
+  const { handleLoginState } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     watch,
     setValue,
     reset,
@@ -88,28 +82,23 @@ export default function SignUp() {
     mode: "onBlur",
   });
 
+  const { mutate: signupMutation, isPending: isLoading } = useMutation({
+    mutationFn: (data: SignUpUser) => AuthService.signup(data),
+    onSuccess: (response) => {
+      const user = handleLoginState(response);
+      console.log(user);
+      reset();
+      router.replace("/dashboard");
+    },
+    onError: (error) => {
+      alert("Login Failed");
+    },
+  });
+
   const selectedRole = watch("role");
 
-  console.log("errors", errors);
-
   const onSubmit = async (data: SignupFormData) => {
-    setIsLoading(true);
-    console.log("Form Data:", data);
-    try {
-      console.log("Signup Data:", data);
-      // Add your signup API call here
-      // await signupAPI(data);
-
-      // Simulate API call
-      setTimeout(() => {
-        setIsLoading(false);
-        alert("Account created successfully!");
-        reset();
-      }, 2000);
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Signup error:", error);
-    }
+    signupMutation(data);
   };
 
   const handleRoleSelect = (roleValue: "student" | "instructor") => {

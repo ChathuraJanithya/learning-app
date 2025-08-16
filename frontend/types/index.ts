@@ -11,7 +11,7 @@ export type SignUpUser = BaseUser & {
   firstName: string;
   lastName: string;
   contact: string;
-  role: "student" | "instructor";
+  role: string;
   password: string;
 };
 

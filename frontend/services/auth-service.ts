@@ -5,11 +5,7 @@ import { LoggingUser, SignUpUser } from "@/types";
 export const AuthService = {
   async login(data: LoggingUser) {
     try {
-      const response = await axios.post(`${BASE_URL}/user/login`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(`${BASE_URL}/user/login`, data);
       return response;
     } catch (error) {
       console.error("Login API Error:", error);
@@ -28,9 +24,7 @@ export const AuthService = {
 
   async signup(body: SignUpUser) {
     try {
-      const response = await axios.post(`${BASE_URL}/signup`, {
-        body,
-      });
+      const response = await axios.post(`${BASE_URL}/user/signup`, body);
 
       return response.data;
     } catch (error) {

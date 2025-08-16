@@ -11,12 +11,11 @@ import {
 import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
 import { Link } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
-import {} from "@/auth-service";
 import { useRouter } from "expo-router";
-import { LoggedInUser, LoggingUser } from "@/types";
+import {  LoggingUser } from "@/types";
 import { AuthService } from "@/services/auth-service";
 import { useAuth } from "@/context/AuthContext";
-import { set } from "zod";
+
 
 export default function SignIn() {
   const router = useRouter();
