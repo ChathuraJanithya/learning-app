@@ -43,9 +43,19 @@ export type Course = {
   createdAt: Date;
 };
 
+export type CourseResponse = {
+  count: number;
+  data: Course[];
+};
+
 export type enrolledCourseIds = {
   _id: string;
   userId: string;
   courseId: string;
   enrolledAt: Date;
+};
+
+export type EnrolledCourseResponse = {
+  id: string;
+  course: string;
 };
