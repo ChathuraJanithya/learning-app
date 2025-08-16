@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import User from "@/api/models/user-model";
 import { AuthRequest } from "@/interfaces";
 import EnrolledCourse from "../models/enrolled-course-model";
 
@@ -94,5 +95,37 @@ export const unenrollFromCourse = async (req: AuthRequest, res: Response) => {
   } catch (error) {
     console.error("Error unenrolling from course:", error);
     return res.status(500).json({ error: "Failed to unenroll from course" });
+  }
+};
+
+export const getEnrolledStudentDetails = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const userRole = req.role;
+    const { courseId } = req.params;
+
+    if (userRole !== "instructor") {
+      return res.status(400).json({ error: "Access denied" });
+    }
+    const enrolledStudents = await EnrolledCourse.find({ course: courseId })
+      .populate({
+        path: "student",
+        select: "email contact firstName lastName",
+      })
+      .exec();
+
+    const students = enrolledStudents.map((item) => item.student);
+
+    return res.status(200).json({
+      data: students,
+      message: "Enrolled students retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error retrieving enrolled courses:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to retrieve enrolled courses" });
   }
 };

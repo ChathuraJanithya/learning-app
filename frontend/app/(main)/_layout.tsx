@@ -49,6 +49,7 @@ export default function DashboardLayout() {
               drawerItemStyle: {
                 display: user?.role === "student" ? "flex" : "none",
               },
+              title: "Enrolled Courses",
             }}
           />
           <Drawer.Screen
