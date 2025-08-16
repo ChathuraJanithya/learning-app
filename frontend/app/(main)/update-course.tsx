@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { useEffect } from "react";
 import {
   ScrollView,
   TouchableOpacity,
@@ -13,6 +14,7 @@ import CourseService from "@/services/course-service";
 import { Course } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import { useCourseContext } from "@/context/CourseContext";
+import { useRouter } from "expo-router";
 
 export const courseSchema = z.object({
   title: z.string().min(1, "Title must be at least 1 characters"),
@@ -24,13 +26,15 @@ export const courseSchema = z.object({
 type CourseFormValues = z.infer<typeof courseSchema>;
 
 export default function UpdateCourse() {
-  const { courseId } = useLocalSearchParams();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { courses } = useCourseContext();
+  const { courseId } = useLocalSearchParams();
 
   const courseToUpdate = courses?.data?.find(
     (course) => course._id === courseId
   );
+
   const {
     control,
     handleSubmit,
@@ -46,6 +50,17 @@ export default function UpdateCourse() {
     },
   });
 
+  useEffect(() => {
+    if (courseToUpdate) {
+      reset({
+        title: courseToUpdate.title,
+        description: courseToUpdate.description,
+        duration: courseToUpdate.duration,
+        content: courseToUpdate.content,
+      });
+    }
+  }, [courseToUpdate, reset]);
+
   const { mutate: updateMutation, isPending: isUpdating } = useMutation({
     mutationFn: (data: Course) =>
       CourseService.updateCourse(courseId as string, data),
@@ -53,7 +68,7 @@ export default function UpdateCourse() {
       alert("Course updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["allCourses"] });
       queryClient.invalidateQueries({ queryKey: ["coursesforinstructor"] });
-      reset();
+      router.replace("/instructor-courses");
     },
     onError: (error) => {
       // Handle error (e.g., show an error message)

@@ -39,12 +39,7 @@ export default function DashboardLayout() {
             options={{
               headerShown: true,
               drawerItemStyle: { display: "none" },
-              header: () => <CustomHeader />,
-              drawerIcon: () => (
-                <View className="flex items-center justify-center">
-                  <LayoutDashboard className="text-white " size={14} />
-                </View>
-              ),
+              title: "Course Details",
             }}
           />
 
@@ -54,12 +49,6 @@ export default function DashboardLayout() {
               drawerItemStyle: {
                 display: user?.role === "student" ? "flex" : "none",
               },
-              header: () => <CustomHeader />,
-              drawerIcon: () => (
-                <View className="flex items-center justify-center">
-                  <LayoutDashboard className="text-white " size={14} />
-                </View>
-              ),
             }}
           />
           <Drawer.Screen
@@ -69,6 +58,7 @@ export default function DashboardLayout() {
               drawerItemStyle: {
                 display: user?.role === "instructor" ? "flex" : "none",
               },
+              title: "Create Course",
             }}
           />
           <Drawer.Screen
@@ -78,6 +68,7 @@ export default function DashboardLayout() {
               drawerItemStyle: {
                 display: "none",
               },
+              title: "Update Course",
             }}
           />
           <Drawer.Screen
@@ -87,6 +78,16 @@ export default function DashboardLayout() {
               drawerItemStyle: {
                 display: user?.role === "instructor" ? "flex" : "none",
               },
+              title: "My Courses",
+              drawerLabel: "My Courses",
+            }}
+          />
+          <Drawer.Screen
+            name="all-courses"
+            options={{
+              headerShown: true,
+              title: "All Courses",
+              drawerLabel: "All Courses",
             }}
           />
         </Drawer>

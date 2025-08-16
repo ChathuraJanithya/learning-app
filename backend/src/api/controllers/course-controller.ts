@@ -108,3 +108,33 @@ export const getAllCourses = async (req: AuthRequest, res: Response) => {
     }
   }
 };
+
+export const updateCourse = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    //only instructors can update courses
+    //@ts-ignore
+    if (req.role !== "instructor") {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    const course = await Course.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    res.status(200).json({ message: "Update successful", data: course });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+};
