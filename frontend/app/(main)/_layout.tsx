@@ -9,7 +9,6 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function DashboardLayout() {
   const { user } = useAuth();
-  console.log(user);
   return (
     <CourseProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -65,6 +64,21 @@ export default function DashboardLayout() {
           />
           <Drawer.Screen
             name="create-course"
+            options={{
+              headerShown: false,
+              drawerItemStyle: {
+                display: user?.role === "instructor" ? "flex" : "none",
+              },
+              header: () => <CustomHeader />,
+              drawerIcon: () => (
+                <View className="flex items-center justify-center">
+                  <LayoutDashboard className="text-white " size={14} />
+                </View>
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="instructor-courses"
             options={{
               headerShown: false,
               drawerItemStyle: {

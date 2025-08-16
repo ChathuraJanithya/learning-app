@@ -41,6 +41,14 @@ const CourseService = {
       throw new Error("Failed to delete course");
     }
   },
+  async getCoursesForInstructor() {
+    try {
+      const response = await httpClient.get(`course/instructor/`);
+      return response;
+    } catch (error) {
+      throw new Error("Failed to fetch courses by instructor");
+    }
+  },
 };
 
 export default CourseService;
