@@ -9,6 +9,8 @@ interface CourseCardProps {
   isEnrolled: boolean;
   onEnroll: (courseId: string) => void;
   onUnenroll: (courseId: string) => void;
+  showControls?: boolean;
+  deleteCourse?: (courseId: string) => void;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
@@ -16,6 +18,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
   isEnrolled,
   onEnroll,
   onUnenroll,
+  showControls = false,
+  deleteCourse,
 }) => {
   // @ts-ignore
   const navigation = useNavigation<any>();
@@ -69,6 +73,24 @@ const CourseCard: React.FC<CourseCardProps> = ({
         >
           <Text className="font-semibold text-white">Unenroll</Text>
         </TouchableOpacity>
+      )}
+      {showControls && (
+        <View className="flex flex-row justify-between">
+          <TouchableOpacity
+            onPress={() => deleteCourse?.(course._id as string)}
+            className="items-center px-4 py-2 bg-red-600 rounded-lg"
+          >
+            <Text className="font-semibold text-white">Delete</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("update-course", { courseId: course._id });
+            }}
+            className="items-center px-4 py-2 bg-blue-600 rounded-lg"
+          >
+            <Text className="font-semibold text-white">Update</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );

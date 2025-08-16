@@ -11,6 +11,8 @@ import InputField from "@/components/ui/InputField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CourseService from "@/services/course-service";
 import { Course } from "@/types";
+import { useLocalSearchParams } from "expo-router";
+import { useCourseContext } from "@/context/CourseContext";
 
 export const courseSchema = z.object({
   title: z.string().min(1, "Title must be at least 1 characters"),
@@ -21,8 +23,14 @@ export const courseSchema = z.object({
 
 type CourseFormValues = z.infer<typeof courseSchema>;
 
-export default function CreateCourse() {
+export default function UpdateCourse() {
+  const { courseId } = useLocalSearchParams();
   const queryClient = useQueryClient();
+  const { courses } = useCourseContext();
+
+  const courseToUpdate = courses?.data?.find(
+    (course) => course._id === courseId
+  );
   const {
     control,
     handleSubmit,
@@ -31,17 +39,18 @@ export default function CreateCourse() {
   } = useForm<CourseFormValues>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      duration: 0,
-      content: "",
+      title: courseToUpdate?.title || "",
+      description: courseToUpdate?.description || "",
+      duration: courseToUpdate?.duration || 0,
+      content: courseToUpdate?.content || "",
     },
   });
 
-  const { mutate: createCourseMutation, isPending: isCreating } = useMutation({
-    mutationFn: (data: Course) => CourseService.createCourse(data),
+  const { mutate: updateMutation, isPending: isUpdating } = useMutation({
+    mutationFn: (data: Course) =>
+      CourseService.updateCourse(courseId as string, data),
     onSuccess: () => {
-      alert("Course created successfully!");
+      alert("Course updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["allCourses"] });
       queryClient.invalidateQueries({ queryKey: ["coursesforinstructor"] });
       reset();
@@ -52,11 +61,14 @@ export default function CreateCourse() {
   });
 
   const onSubmit = (data: CourseFormValues) => {
-    createCourseMutation(data);
+    updateMutation(data);
   };
 
   return (
     <ScrollView className="flex-1 w-full h-full bg-white">
+      <Text className="p-4 text-2xl font-medium text-gray-800">
+        Update Course : {courseToUpdate?.title}
+      </Text>
       <KeyboardAvoidingView className="flex flex-col h-full gap-3 p-4 space-y-4">
         <Controller
           name="title"
@@ -126,12 +138,12 @@ export default function CreateCourse() {
         />
 
         <TouchableOpacity
-          className={`mt-8 bg-black rounded-xl py-4 ${isCreating ? "opacity-70" : ""}`}
+          className={`mt-8 bg-black rounded-xl py-4 ${isUpdating ? "opacity-70" : ""}`}
           onPress={handleSubmit(onSubmit)}
-          disabled={isCreating}
+          disabled={isUpdating}
         >
           <Text className="text-base font-semibold text-center text-white">
-            {isCreating ? "Creating Course..." : "Create Course"}
+            {isUpdating ? "Updating Course..." : "Update Course"}
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

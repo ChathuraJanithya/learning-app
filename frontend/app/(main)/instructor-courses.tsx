@@ -15,6 +15,7 @@ export default function InstructorCourses() {
     unenrollCourse,
     isLoading,
     enrolledCourseIds,
+    deleteCourseHandler,
   } = useCourseContext();
 
   const {
@@ -48,6 +49,8 @@ export default function InstructorCourses() {
               //@ts-ignore
               isEnrolled={enrolledCourseIds.includes(course._id)}
               onUnenroll={(courseId) => unenrollCourse(courseId)}
+              showControls={true}
+              deleteCourse={(courseId) => deleteCourseHandler(courseId)}
             />
           ))}
         </View>

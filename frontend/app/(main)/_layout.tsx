@@ -37,7 +37,7 @@ export default function DashboardLayout() {
           <Drawer.Screen
             name="[courseId]"
             options={{
-              headerShown: false,
+              headerShown: true,
               drawerItemStyle: { display: "none" },
               header: () => <CustomHeader />,
               drawerIcon: () => (
@@ -65,31 +65,28 @@ export default function DashboardLayout() {
           <Drawer.Screen
             name="create-course"
             options={{
-              headerShown: false,
+              headerShown: true,
               drawerItemStyle: {
                 display: user?.role === "instructor" ? "flex" : "none",
               },
-              header: () => <CustomHeader />,
-              drawerIcon: () => (
-                <View className="flex items-center justify-center">
-                  <LayoutDashboard className="text-white " size={14} />
-                </View>
-              ),
+            }}
+          />
+          <Drawer.Screen
+            name="update-course"
+            options={{
+              headerShown: true,
+              drawerItemStyle: {
+                display: "none",
+              },
             }}
           />
           <Drawer.Screen
             name="instructor-courses"
             options={{
-              headerShown: false,
+              headerShown: true,
               drawerItemStyle: {
                 display: user?.role === "instructor" ? "flex" : "none",
               },
-              header: () => <CustomHeader />,
-              drawerIcon: () => (
-                <View className="flex items-center justify-center">
-                  <LayoutDashboard className="text-white " size={14} />
-                </View>
-              ),
             }}
           />
         </Drawer>

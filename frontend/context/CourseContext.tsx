@@ -11,6 +11,7 @@ interface CourseContextType {
   isLoading: boolean;
   enrollCourse: (courseId: string) => void;
   unenrollCourse: (courseId: string) => void;
+  deleteCourseHandler: (courseId: string) => void;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -48,7 +49,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     mutationFn: (courseId: string) =>
       EnrolledCourseService.enrollInCourse(courseId),
     onSuccess: (data) => {
-      console.log("Successfully enrolled in course:", data);
       alert("Enrolled successfully!");
       queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
     },
@@ -67,7 +67,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       EnrolledCourseService.unenrollFromCourse(courseId),
     onSuccess: (data) => {
       alert("Unenrolled successfully!");
-      console.log("Successfully unenrolled from course:", data);
       queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
     },
     onError: (error) => {
@@ -81,6 +80,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
   };
 
+  const { mutate: deleteCourse, isPending: isDeleting } = useMutation({
+    mutationFn: (courseId: string) => CourseService.deleteCourse(courseId),
+    onSuccess: (data) => {
+      alert("Deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["coursesforinstructor"] });
+    },
+    onError: (error) => {
+      console.error("Error deleting course:", error);
+    },
+  });
+
+  const deleteCourseHandler = (courseId: string) => {
+    deleteCourse(courseId);
+  };
+
   const isLoading = isCoursesFetching || isEnrolledFetching;
 
   return (
@@ -91,6 +105,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         unenrollCourse,
         enrollCourse,
         isLoading,
+        deleteCourseHandler,
       }}
     >
       {children}

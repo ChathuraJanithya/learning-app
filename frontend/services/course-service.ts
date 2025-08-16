@@ -27,16 +27,18 @@ const CourseService = {
       throw error;
     }
   },
-  async updateCourse(id: string, data: any) {
+  async updateCourse(id: string, data: Course) {
     try {
-      return await httpClient.put(`/course/${id}`, data);
+      const response = await httpClient.put(`/course/${id}`, data);
+      return response;
     } catch (error) {
       throw new Error("Failed to update course");
     }
   },
-  async deleteCourse(id: string) {
+  async deleteCourse(courseId: string) {
     try {
-      return await httpClient.delete(`/courses/${id}`);
+      const response = await httpClient.delete(`/course/${courseId}`);
+      return response;
     } catch (error) {
       throw new Error("Failed to delete course");
     }
