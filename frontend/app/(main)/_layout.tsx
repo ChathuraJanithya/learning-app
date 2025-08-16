@@ -29,7 +29,6 @@ export default function DashboardLayout() {
             ),
           }}
         />
-        <Drawer.Screen name="user/[id]" options={{}} />
       </Drawer>
     </GestureHandlerRootView>
   );

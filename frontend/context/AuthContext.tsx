@@ -29,8 +29,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Load login state and user details from storage
     const loadAuthState = async () => {
       const storedUser = await AsyncStorage.getItem("user");
-      console.log("This is load auth state");
-      console.log(storedUser);
       if (storedUser) {
         setUser(JSON.parse(storedUser));
         setIsLoggedIn(true);
@@ -38,8 +36,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Navigate to Dashboard if credentials exist
         router.replace("/dashboard");
       } else {
-        setIsLoggedIn(false);
         // Navigate to Login if no credentials exist
+        setIsLoggedIn(false);
         router.replace("/sign-in");
       }
     };

@@ -32,3 +32,20 @@ export type LoginResponse = {
     };
   };
 };
+
+export type Course = {
+  _id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  duration: number;
+  content: string;
+  createdAt: Date;
+};
+
+export type enrolledCourseIds = {
+  _id: string;
+  userId: string;
+  courseId: string;
+  enrolledAt: Date;
+};
