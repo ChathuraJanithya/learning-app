@@ -20,7 +20,6 @@ const CourseService = {
   async createCourse(data: Course) {
     try {
       const response = await httpClient.post("/course", data);
-      console.log(response, "response from CreateCourse");
       return response;
     } catch (error) {
       console.error("Create Course API Error:", error);

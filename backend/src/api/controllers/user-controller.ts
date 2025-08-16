@@ -23,8 +23,6 @@ export const signup = async (
       return res.status(400).json({ message: "Invalid role" });
     }
 
-    console.log(validRole, "exposed");
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await User.create({
@@ -76,8 +74,6 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     if (!existingUser) {
       return res.status(404).json({ message: "User doesn't exist" });
     }
-
-    console.log(existingUser, "exposed");
 
     const matchPassword = await bcrypt.compare(password, existingUser.password);
 

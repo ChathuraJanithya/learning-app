@@ -14,8 +14,6 @@ export default function CoursePage() {
   const course = courses?.data?.find((c) => c._id === courseId);
   const runGetDetails = user?.role === "instructor" && showInfo;
 
-  console.log("runDetails", runGetDetails);
-
   const { data: studentDetails, isFetching: isFetchingStudentDetails } =
     useQuery({
       queryKey: ["studentDetails", courseId],
