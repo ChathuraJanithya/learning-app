@@ -1,6 +1,6 @@
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/constants/server";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const httpClient = axios.create({
   baseURL: BASE_URL,
@@ -9,7 +9,7 @@ const httpClient = axios.create({
 // Request Interceptor - Attach Token
 httpClient.interceptors.request.use(
   async (config) => {
-    const userDetails = await AsyncStorage.getItem("userDetails");
+    const userDetails = await AsyncStorage.getItem("user");
 
     if (userDetails) {
       const { token } = JSON.parse(userDetails);

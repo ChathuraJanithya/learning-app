@@ -18,4 +18,17 @@ export type SignUpUser = BaseUser & {
 export type LoggedInUser = BaseUser & {
   role: "student" | "instructor";
   name: string;
+  token: string;
+};
+
+export type LoginResponse = {
+  status: number;
+  data: {
+    token: string;
+    user: {
+      email: string;
+      name: string;
+      role: "student" | "instructor";
+    };
+  };
 };

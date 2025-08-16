@@ -7,23 +7,15 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-
-type User = {
-  name: string;
-  email: string;
-  mobileNumber: string;
-  address: string;
-};
+import { LoggedInUser, LoginResponse } from "@/types";
 
 interface AuthContextProps {
   isLoggedIn: boolean;
-  userDetails: { role: string; token: string; user: User } | null;
-  login: (details: {
-    role: string;
-    token: string;
-    user: User;
-  }) => Promise<void>;
-  logout: () => Promise<void>;
+  user: LoggedInUser | null;
+  logOut: () => Promise<void>;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setUser: React.Dispatch<React.SetStateAction<LoggedInUser | null>>;
+  handleLoginState: (response: LoginResponse) => Promise<LoggedInUser>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -31,27 +23,22 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userDetails, setUserDetails] = useState<{
-    role: string;
-    token: string;
-    user: User;
-  } | null>(null);
+  const [user, setUser] = useState<LoggedInUser | null>(null);
 
   useEffect(() => {
     // Load login state and user details from storage
     const loadAuthState = async () => {
-      const storedUserDetails = await AsyncStorage.getItem("userDetails");
+      const storedUser = await AsyncStorage.getItem("user");
       console.log("This is load auth state");
-      console.log(storedUserDetails);
-      if (storedUserDetails) {
-        setUserDetails(JSON.parse(storedUserDetails));
+      console.log(storedUser);
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
         setIsLoggedIn(true);
-        // Navigate to Home if credentials exist
-        //@ts-ignore
-        router.replace("(tabs)");
+
+        // Navigate to Dashboard if credentials exist
+        router.replace("/dashboard");
       } else {
         setIsLoggedIn(false);
-        setUserDetails(null);
         // Navigate to Login if no credentials exist
         router.replace("/sign-in");
       }
@@ -60,25 +47,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadAuthState();
   }, []);
 
-  const login = async (details: {
-    role: string;
-    token: string;
-    user: User;
-  }) => {
-    await AsyncStorage.setItem("userDetails", JSON.stringify(details));
-    setUserDetails(details);
-    setIsLoggedIn(true);
+  // Save login state and user details to storage
+  const handleLoginState = async (
+    response: LoginResponse
+  ): Promise<LoggedInUser> => {
+    setIsLoggedIn(response.status === 201);
+    const tempUser: LoggedInUser = {
+      email: response.data.user.email,
+      name: response.data.user.name,
+      role: response.data.user.role,
+      token: response.data.token,
+    };
+    setUser(tempUser);
+    await AsyncStorage.setItem("user", JSON.stringify(tempUser));
+    return tempUser;
   };
 
-  const logout = async () => {
-    await AsyncStorage.removeItem("userDetails");
-    setUserDetails(null);
+  const logOut = async () => {
     setIsLoggedIn(false);
+    setUser(null);
+    await AsyncStorage.removeItem("user");
     router.replace("/sign-in");
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userDetails, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        user,
+        setUser,
+        setIsLoggedIn,
+        handleLoginState,
+        logOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -9,32 +9,42 @@ import {
   Platform,
 } from "react-native";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Link } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
-import { login } from "@/auth-service";
+import {} from "@/auth-service";
+import { useRouter } from "expo-router";
+import { LoggedInUser, LoggingUser } from "@/types";
+import { AuthService } from "@/services/auth-service";
+import { useAuth } from "@/context/AuthContext";
+import { set } from "zod";
 
 export default function SignIn() {
+  const router = useRouter();
+  const { handleLoginState } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const navigation = useNavigation();
 
   const { mutate: loginMutation, isPending: isLoading } = useMutation({
-    mutationFn: () => login({ email, password }),
-    onSuccess: (data) => {
-      // Handle successful login
-      console.log("Login successful:", data);
-      navigation.navigate("(tabs)");
+    mutationFn: (data: LoggingUser) => AuthService.login(data),
+    onSuccess: (response) => {
+      const user = handleLoginState(response);
+      console.log(user);
+      router.replace("/dashboard");
     },
     onError: (error) => {
-      // Handle login error
       console.error("Login failed:", error);
+      alert("Login Failed");
     },
   });
 
-  const handleLogin = async () => {
-    loginMutation();
+  const handleLogin = () => {
+    const data = {
+      email,
+      password,
+    };
+    console.log(data);
+    loginMutation(data);
   };
 
   return (
@@ -117,7 +127,7 @@ export default function SignIn() {
 
           {/* Login Button */}
           <TouchableOpacity
-            className={`mt-8 bg-blue-600 rounded-xl py-4 ${isLoading ? "opacity-70" : ""}`}
+            className={`mt-8 bg-black rounded-xl py-4 ${isLoading ? "opacity-70" : ""}`}
             onPress={handleLogin}
             disabled={isLoading}
           >

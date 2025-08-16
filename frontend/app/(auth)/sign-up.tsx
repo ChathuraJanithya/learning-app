@@ -131,7 +131,7 @@ export default function SignUp() {
         </View>
 
         {/* Form */}
-        <KeyboardAvoidingView className="space-y-5">
+        <KeyboardAvoidingView className="flex flex-col gap-3 space-y-5">
           {/* First Name */}
           <View>
             <Text className="block mb-3 text-sm font-medium text-gray-700">
@@ -146,17 +146,17 @@ export default function SignUp() {
                 render={({ field }) => (
                   <TextInput
                     {...field}
-                    className={`block w-full pl-12 pr-4 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors ${
+                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none text-start focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
                       errors.firstName ? "border-red-300" : "border-gray-200"
                     }`}
                     value={field.value}
                     onChangeText={field.onChange}
                     onBlur={field.onBlur}
-                    placeholder="Your Name"
+                    placeholder="Your First Name"
                   />
                 )}
                 name="firstName"
-                rules={{ required: "You must enter your name" }}
+                rules={{ required: "You must enter your first name" }}
               />
             </View>
             {errors.firstName && (
@@ -178,7 +178,7 @@ export default function SignUp() {
                 render={({ field }) => (
                   <TextInput
                     {...field}
-                    className={`block w-full pl-12 pr-4 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors ${
+                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
                       errors.lastName ? "border-red-300" : "border-gray-200"
                     }`}
                     placeholder="Enter your last name"
@@ -211,7 +211,7 @@ export default function SignUp() {
                 render={({ field }) => (
                   <TextInput
                     {...field}
-                    className={`block w-full pl-12 pr-4 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors ${
+                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
                       errors.contact ? "border-red-300" : "border-gray-200"
                     }`}
                     placeholder="Enter your phone number"
@@ -244,7 +244,7 @@ export default function SignUp() {
                 render={({ field }) => (
                   <TextInput
                     {...field}
-                    className={`block w-full pl-12 pr-4 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors ${
+                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
                       errors.email ? "border-red-300" : "border-gray-200"
                     }`}
                     placeholder="Enter your email"
@@ -270,7 +270,7 @@ export default function SignUp() {
             <View className="relative">
               <TouchableOpacity
                 onPress={() => setShowRoleDropdown(!showRoleDropdown)}
-                className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors ${
+                className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
                   errors.role ? "border-red-300" : "border-gray-200"
                 }`}
               >
@@ -339,7 +339,7 @@ export default function SignUp() {
                 render={({ field }) => (
                   <TextInput
                     {...field}
-                    className={`block w-full pl-12 pr-12 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-colors ${
+                    className={`block w-full py-3  px-2 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
                       errors.password ? "border-red-300" : "border-gray-200"
                     }`}
                     placeholder="Create a strong password"
@@ -371,7 +371,7 @@ export default function SignUp() {
 
           {/* Submit TouchableOpacity */}
           <TouchableOpacity
-            className={`mt-8 bg-blue-600 rounded-xl py-4 ${isLoading ? "opacity-70" : ""}`}
+            className={`mt-8 bg-black rounded-xl py-4 ${isLoading ? "opacity-70" : ""}`}
             onPress={handleSubmit(onSubmit)}
             disabled={isLoading}
           >
@@ -382,7 +382,7 @@ export default function SignUp() {
         </KeyboardAvoidingView>
 
         {/* Sign In Link */}
-        <View className="flex flex-row items-center my-6 text-center">
+        <View className="flex flex-row items-center justify-center my-6 text-center">
           <Text className="text-gray-600">Already have an account? </Text>
           <Link href="/sign-in">
             <Text className="font-medium text-blue-600">Sign In</Text>
