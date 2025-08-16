@@ -3,6 +3,7 @@ import User from "@/api/models/user-model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import logger from "../../utils/logger";
+import Role from "@/api/models/role-model";
 
 export const signup = async (
   req: Request,
@@ -15,6 +16,14 @@ export const signup = async (
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
+
+    const validRole = await Role.findById(role);
+
+    if (!validRole) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
+    console.log(validRole, "exposed");
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -34,12 +43,21 @@ export const signup = async (
     }
 
     const token = jwt.sign(
-      { email: result.email, id: result._id.toString() },
+      {
+        id: result._id.toString(),
+        role: { _id: validRole._id.toString(), roleName: validRole.roleName },
+      },
       secretKey,
       { expiresIn: "1d" }
     );
 
-    return res.status(201).json({ token });
+    const userData = {
+      email: result.email,
+      name: `${result.firstName} ${result.lastName}`,
+      role: validRole.roleName,
+    };
+
+    return res.status(201).json({ user: userData, token });
   } catch (error: unknown) {
     logger.error(error);
     return res.status(500).json({ message: "Something went wrong" });
@@ -58,6 +76,8 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     if (!existingUser) {
       return res.status(404).json({ message: "User doesn't exist" });
     }
+
+    console.log(existingUser, "exposed");
 
     const matchPassword = await bcrypt.compare(password, existingUser.password);
 
