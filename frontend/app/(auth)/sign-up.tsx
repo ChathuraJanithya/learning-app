@@ -7,7 +7,6 @@ import {
   EyeOff,
   Mail,
   Lock,
-  User,
   Phone,
   ChevronDown,
   UserCheck,
@@ -24,6 +23,7 @@ import {
   TextInput,
 } from "react-native";
 import { Link } from "expo-router";
+import InputField from "@/components/ui/InputField";
 
 // Zod validation schema
 const signupSchema = z.object({
@@ -50,16 +50,24 @@ const signupSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   role: z
     .string()
-    .refine((val) => ["12414124112", "2141241241"].includes(val), {
-      message: "Please select a role",
-    }),
+    .refine(
+      (val) =>
+        ["689ad8b781797dc972c845cd", "689ad8ac81797dc972c845ca"].includes(val),
+      {
+        message: "Please select a role",
+      }
+    ),
 });
 
 type SignupFormData = z.infer<typeof signupSchema>;
 
 const roleOptions = [
-  { value: "12414124112", Text: "Student", icon: BookOpen },
-  { value: "2141241241", Text: "Instructor", icon: GraduationCap },
+  { value: "689ad8b781797dc972c845cd", Text: "Student", icon: BookOpen },
+  {
+    value: "689ad8ac81797dc972c845ca",
+    Text: "Instructor",
+    icon: GraduationCap,
+  },
 ];
 
 export default function SignUp() {
@@ -131,136 +139,77 @@ export default function SignUp() {
         </View>
 
         {/* Form */}
-        <KeyboardAvoidingView className="flex flex-col gap-3 space-y-5">
+        <KeyboardAvoidingView className="flex flex-col gap-3">
           {/* First Name */}
-          <View>
-            <Text className="block mb-3 text-sm font-medium text-gray-700">
-              First Name
-            </Text>
-            <View className="relative">
-              <View className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <User className="w-5 h-5 text-gray-400" />
-              </View>
-              <Controller
-                control={control}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none text-start focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
-                      errors.firstName ? "border-red-300" : "border-gray-200"
-                    }`}
-                    value={field.value}
-                    onChangeText={field.onChange}
-                    onBlur={field.onBlur}
-                    placeholder="Your First Name"
-                  />
-                )}
-                name="firstName"
-                rules={{ required: "You must enter your first name" }}
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <InputField
+                {...field}
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                placeholder="Your First Name"
+                error={errors.firstName?.message}
+                label="First Name"
               />
-            </View>
-            {errors.firstName && (
-              <Text className="mt-1 text-sm text-red-600">
-                {errors.firstName.message}
-              </Text>
             )}
-          </View>
+            name="firstName"
+            rules={{ required: "You must enter your first name" }}
+          />
 
           {/* Last Name */}
-          <View>
-            <Text className="block mb-3 text-sm font-medium text-gray-700">
-              Last Name
-            </Text>
-            <View className="">
-              <Controller
-                name="lastName"
-                control={control}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
-                      errors.lastName ? "border-red-300" : "border-gray-200"
-                    }`}
-                    placeholder="Enter your last name"
-                    value={field.value}
-                    onChangeText={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
+          <Controller
+            name="lastName"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                {...field}
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                placeholder="Your Last Name"
+                error={errors.lastName?.message}
+                label="Last Name"
               />
-            </View>
-            {errors.lastName && (
-              <Text className="mt-1 text-sm text-red-600">
-                {errors.lastName.message}
-              </Text>
             )}
-          </View>
+            rules={{ required: "You must enter your last name" }}
+          />
 
           {/* Contact */}
-          <View>
-            <Text className="block mb-3 text-sm font-medium text-gray-700">
-              Contact Number
-            </Text>
-            <View className="relative">
-              <View className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <Phone className="w-5 h-5 text-gray-400" />
-              </View>
-              <Controller
-                name="contact"
-                control={control}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
-                      errors.contact ? "border-red-300" : "border-gray-200"
-                    }`}
-                    placeholder="Enter your phone number"
-                    value={field.value}
-                    onChangeText={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
+          <Controller
+            name="contact"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                {...field}
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                placeholder="Enter your phone number"
+                label="Contact"
               />
-            </View>
-            {errors.contact && (
-              <Text className="mt-1 text-sm text-red-600">
-                {errors.contact.message}
-              </Text>
             )}
-          </View>
+            rules={{ required: "You must enter your Contacts" }}
+          />
 
           {/* Email */}
-          <View>
-            <Text className="block mb-3 text-sm font-medium text-gray-700">
-              Email Address
-            </Text>
-            <View className="relative">
-              <View className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <Mail className="w-5 h-5 text-gray-400" />
-              </View>
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    className={`block w-full  px-2 py-3 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
-                      errors.email ? "border-red-300" : "border-gray-200"
-                    }`}
-                    placeholder="Enter your email"
-                    value={field.value}
-                    onChangeText={field.onChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
+
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <InputField
+                {...field}
+                placeholder="Enter your email"
+                value={field.value}
+                onChangeText={field.onChange}
+                onBlur={field.onBlur}
+                error={errors.email?.message}
+                label="Email"
               />
-            </View>
-            {errors.email && (
-              <Text className="mt-1 text-sm text-red-600">
-                {errors.email.message}
-              </Text>
             )}
-          </View>
+          />
 
           {/* Role Dropdown */}
           <View>
