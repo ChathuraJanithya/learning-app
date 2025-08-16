@@ -29,6 +29,16 @@ export default function DashboardLayout() {
             ),
           }}
         />
+
+        {/* courseId route */}
+        <Drawer.Screen
+          name="[courseId]"
+          options={{
+            title: "Course Details",
+            headerShown: true,
+            drawerItemStyle: { display: "none" },
+          }}
+        />
       </Drawer>
     </GestureHandlerRootView>
   );

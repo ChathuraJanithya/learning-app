@@ -10,6 +10,6 @@ const enrolledCourseRouter: Router = express.Router();
 
 enrolledCourseRouter.post("/:courseId", enrollInCourse);
 enrolledCourseRouter.get("/", getEnrolledCourseIds);
-enrolledCourseRouter.delete("/unenroll/:courseId", unenrollFromCourse);
+enrolledCourseRouter.delete("/:courseId", unenrollFromCourse);
 
 export default enrolledCourseRouter;
