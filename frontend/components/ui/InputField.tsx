@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput, Text, View } from "react-native";
 
-type InputFieldType = "text" | "email" | "password";
+type InputFieldType = "text" | "email" | "password" | "phone" | "numeric";
 
 interface InputFieldProps {
   value: string;

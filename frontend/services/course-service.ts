@@ -1,4 +1,5 @@
 import httpClient from "@/hooks/httpClient";
+import { Course } from "@/types";
 
 const CourseService = {
   async getAllCourses() {
@@ -16,16 +17,19 @@ const CourseService = {
       throw new Error("Failed to fetch course");
     }
   },
-  async createCourse(data: any) {
+  async createCourse(data: Course) {
     try {
-      return await httpClient.post("/courses", data);
+      const response = await httpClient.post("/course", data);
+      console.log(response, "response from CreateCourse");
+      return response;
     } catch (error) {
-      throw new Error("Failed to create course");
+      console.error("Create Course API Error:", error);
+      throw error;
     }
   },
   async updateCourse(id: string, data: any) {
     try {
-      return await httpClient.put(`/courses/${id}`, data);
+      return await httpClient.put(`/course/${id}`, data);
     } catch (error) {
       throw new Error("Failed to update course");
     }

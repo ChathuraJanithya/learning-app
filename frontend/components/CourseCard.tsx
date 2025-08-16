@@ -2,6 +2,7 @@ import React from "react";
 import { Course } from "@/types";
 import { useNavigation } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
+import { useAuth } from "@/context/AuthContext";
 
 interface CourseCardProps {
   course: Course;
@@ -18,6 +19,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
 }) => {
   // @ts-ignore
   const navigation = useNavigation<any>();
+  const { user } = useAuth(); // Assuming you have a useAuth hook to get the current user
 
   return (
     <View className="p-4 mb-4 bg-white shadow-md rounded-xl">
@@ -42,26 +44,27 @@ const CourseCard: React.FC<CourseCardProps> = ({
       <View className="flex-row justify-between mb-4">
         <Text className="text-sm text-gray-500">{course.duration} hrs</Text>
         <Text className="text-sm text-gray-500">
-          {new Date(course.createdAt).toLocaleDateString()}
+          {course.createdAt
+            ? new Date(course.createdAt).toLocaleDateString()
+            : "N/A"}
         </Text>
       </View>
 
-      {/* Enroll Button */}
-      {!isEnrolled ? (
+      {/* Enroll/Enrolled Button - Only for students */}
+      {user?.role === "student" &&
+        (!isEnrolled ? (
+          <TouchableOpacity
+            onPress={() => onEnroll(course._id as string)}
+            className="items-center px-4 py-2 bg-black rounded-lg"
+          >
+            <Text className="font-semibold text-white">Enroll</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text className="font-semibold text-gray-500">Enrolled</Text>
+        ))}
+      {isEnrolled && user?.role === "student" && (
         <TouchableOpacity
-          onPress={() => onEnroll(course._id)}
-          className="items-center px-4 py-2 bg-black rounded-lg"
-        >
-          <Text className="font-semibold text-white">Enroll</Text>
-        </TouchableOpacity>
-      ) : (
-        <Text className="font-semibold text-gray-500">Enrolled</Text>
-      )}
-
-      {/* Unenroll Button */}
-      {isEnrolled && (
-        <TouchableOpacity
-          onPress={() => onUnenroll(course._id)}
+          onPress={() => onUnenroll(course._id as string)}
           className="items-center px-4 py-2 bg-red-600 rounded-lg"
         >
           <Text className="font-semibold text-white">Unenroll</Text>

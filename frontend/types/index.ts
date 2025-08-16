@@ -34,13 +34,13 @@ export type LoginResponse = {
 };
 
 export type Course = {
-  _id: string;
   title: string;
   description: string;
-  instructor: string;
   duration: number;
   content: string;
-  createdAt: Date;
+  _id?: string;
+  instructor?: string;
+  createdAt?: Date;
 };
 
 export type CourseResponse = {

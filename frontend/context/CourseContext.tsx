@@ -49,6 +49,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       EnrolledCourseService.enrollInCourse(courseId),
     onSuccess: (data) => {
       console.log("Successfully enrolled in course:", data);
+      alert("Enrolled successfully!");
       queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
     },
     onError: (error) => {
@@ -65,6 +66,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     mutationFn: (courseId: string) =>
       EnrolledCourseService.unenrollFromCourse(courseId),
     onSuccess: (data) => {
+      alert("Unenrolled successfully!");
       console.log("Successfully unenrolled from course:", data);
       queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
     },

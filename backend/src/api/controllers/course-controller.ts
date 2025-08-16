@@ -10,6 +10,15 @@ export const createCourse = async (req: AuthRequest, res: Response) => {
     if (req.role !== "instructor") {
       return res.status(403).json({ error: "Access denied" });
     }
+    // Set the instructor to the authenticated user
+    if (!req.user) {
+      return res.status(400).json({ error: "Authenticated user ID not found" });
+    }
+
+    course.instructor =
+      typeof req.user === "string" ? (req.user as any) : req.user;
+
+    // Save the course
     await course.save();
     res
       .status(201)

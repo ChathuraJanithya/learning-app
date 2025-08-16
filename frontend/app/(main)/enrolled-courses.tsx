@@ -5,7 +5,7 @@ import { Course } from "@/types";
 import CourseCard from "@/components/CourseCard";
 import { useCourseContext } from "@/context/CourseContext";
 
-export default function Enrolled() {
+export default function EnrolledCourses() {
   const {
     courses,
     enrollCourse,
