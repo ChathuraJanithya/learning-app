@@ -59,3 +59,11 @@ export type EnrolledCourseResponse = {
   id: string;
   course: string;
 };
+
+export type studentDetails = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  contact: string;
+};

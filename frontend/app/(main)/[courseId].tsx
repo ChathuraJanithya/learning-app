@@ -1,14 +1,30 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { useCourseContext } from "@/context/CourseContext";
-import { useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
+import { useCourseContext } from "@/context/CourseContext";
+import EnrolledCourseService from "@/services/enrolled-course-service";
+import { View, Text, ScrollView } from "react-native";
+import { studentDetails } from "@/types";
 
 export default function CoursePage() {
-  const { courseId } = useLocalSearchParams();
-  const { courses, enrollCourse } = useCourseContext();
+  const { courseId, showInfo } = useLocalSearchParams();
+  const { courses } = useCourseContext();
   const { user } = useAuth();
   const course = courses?.data?.find((c) => c._id === courseId);
+  const runGetDetails = user?.role === "instructor" && showInfo;
+
+  console.log("runDetails", runGetDetails);
+
+  const { data: studentDetails, isFetching: isFetchingStudentDetails } =
+    useQuery({
+      queryKey: ["studentDetails", courseId],
+      queryFn: () =>
+        EnrolledCourseService.getEnrolledStudents(courseId as string),
+      staleTime: Infinity,
+      retryDelay: 1000,
+      enabled: !!runGetDetails,
+    });
 
   return (
     <View className="w-full h-full p-4 bg-white">
@@ -53,7 +69,7 @@ export default function CoursePage() {
         </View>
 
         {/* Action Buttons */}
-        {user?.role === "student" && (
+        {/*    {user?.role === "student" && (
           <View className="flex flex-row mt-8 space-x-4">
             <TouchableOpacity
               className="flex-1 p-4 bg-blue-500 rounded-lg"
@@ -63,6 +79,29 @@ export default function CoursePage() {
                 Enroll Now
               </Text>
             </TouchableOpacity>
+          </View>
+        )} */}
+        {runGetDetails == "true" && (
+          <View className="mt-8">
+            <Text className="mb-2 text-lg font-semibold">
+              Enrolled Students
+            </Text>
+            {isFetchingStudentDetails ? (
+              <Text>Loading enrolled students...</Text>
+            ) : (
+              <View className="space-y-2">
+                {studentDetails?.data?.map((student: studentDetails) => (
+                  <Text key={student._id} className="text-gray-700">
+                    {student.firstName} {student.lastName} ({student.email})
+                  </Text>
+                ))}
+                {studentDetails?.data?.length === 0 && (
+                  <Text className="text-gray-500">
+                    No students enrolled yet.
+                  </Text>
+                )}
+              </View>
+            )}
           </View>
         )}
       </ScrollView>

@@ -34,7 +34,10 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("[courseId]", { courseId: course._id });
+            navigation.navigate("[courseId]", {
+              courseId: course._id,
+              showInfo: showControls as boolean,
+            });
           }}
         >
           <Text className="text-blue-500">View Details</Text>

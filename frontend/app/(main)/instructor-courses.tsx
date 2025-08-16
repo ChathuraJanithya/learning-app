@@ -10,10 +10,8 @@ import CourseService from "@/services/course-service";
 
 export default function InstructorCourses() {
   const {
-    courses,
     enrollCourse,
     unenrollCourse,
-    isLoading,
     enrolledCourseIds,
     deleteCourseHandler,
   } = useCourseContext();
