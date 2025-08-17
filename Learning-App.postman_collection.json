@@ -1,0 +1,524 @@
+{
+	"info": {
+		"_postman_id": "e6622289-4fef-45cf-a8e3-71147c192f97",
+		"name": "Learning-App",
+		"description": "# **Learning App API Documentation**\n\nBase URL:\n\n``` json\n{{baseURL}}  (Default: http://localhost:8080)\n\n ```\n\nAuthentication:\n\n- Uses **Bearer Token** (`Authorization: Bearer {{authToken}}`)\n    \n- Obtain token via **Login API**\n    \n\n---\n\n## **Health Check**\n\n### `GET /health`\n\nCheck if the API server is running.  \n**Auth Required:** Yes  \n**Response:**\n\n``` json\n{\n  \"status\": \"OK\"\n}\n\n ```\n\n---\n\n## **Auth & User Management**\n\n### **Register User**\n\n`POST /user/signup`\n\nRegisters a new user (Student or Instructor).  \n**Body:**\n\n``` json\n{\n  \"firstName\": \"instructor\",\n  \"lastName\": \"instructor\",\n  \"contact\": \"0712150138\",\n  \"email\": \"instructor@gmail.com\",\n  \"role\": \"689ad8ac81797dc972c845ca\", \n  \"password\": \"instructor123\"\n}\n\n ```\n\n**Response:**\n\n``` json\n{\n  \"message\": \"User registered successfully\",\n  \"user\": { ... }\n}\n\n ```\n\n---\n\n### **Login**\n\n`POST /user/login`\n\nLogs in a Student or Instructor and returns a JWT token.\n\n**Student Login Example:**\n\n``` json\n{\n  \"email\": \"student@gmail.com\",\n  \"password\": \"student123\"\n}\n\n ```\n\n**Instructor Login Example:**\n\n``` json\n{\n  \"email\": \"instructor@gmail.com\",\n  \"password\": \"instructor123\"\n}\n\n ```\n\n**Response:**\n\n``` json\n{\n  \"token\": \"JWT_TOKEN_HERE\",\n  \"user\": {\n    \"id\": \"...\",\n    \"role\": \"student\"\n  }\n}\n\n ```\n\n---\n\n### **Add Role**\n\n`POST /role`\n\nCreate a new role (e.g., Student, Instructor).\n\n**Body:**\n\n``` json\n{\n  \"roleName\": \"student\",\n  \"roleDescription\": \"Student\"\n}\n\n ```\n\n**Auth Required:** Yes (Admin or privileged user)\n\n---\n\n## **Course Management**\n\n### **Create Course**\n\n`POST /course`\n\nCreates a new course.\n\n**Body:**\n\n``` json\n{\n  \"title\": \"course 01\",\n  \"description\": \"course 01 description\",\n  \"duration\": 3,\n  \"content\": \"course 01 content\",\n  \"instructor\": \"689ad8b781797dc972c845cd\"\n}\n\n ```\n\n**Auth Required:** Yes (Instructor)\n\n---\n\n### **Delete Course**\n\n`DELETE /course/:courseId`\n\nDeletes a specific course.\n\n**Auth Required:** Yes (Instructor who owns the course or Admin)\n\n---\n\n### **Get All Courses**\n\n`GET /course`\n\nFetches all available courses.  \n**Auth Required:** Yes  \n**Response:**\n\n``` json\n[\n  {\n    \"title\": \"course 01\",\n    \"description\": \"course 01 description\",\n    ...\n  }\n]\n\n ```\n\n---\n\n### **Get Courses by Instructor (Token)**\n\n`GET /course/instructor`\n\nFetches courses for the authenticated instructor.  \n**Auth Required:** Yes (Instructor)\n\n---\n\n### **Get Courses by Instructor ID**\n\n`GET /course/instructor/:instructorId`\n\nFetches courses for a specific instructor ID.  \n**Auth Required:** Yes\n\nExample:\n\n``` json\n/course/instructor/689ad8b781797dc972c845cd\n\n ```\n\n---\n\n## **Environment Variables**\n\n- `baseURL` → API base URL (default: `http://localhost:8080`)\n    \n- `authToken` → JWT token (set after login)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34044484"
+	},
+	"item": [
+		{
+			"name": "Course",
+			"item": [
+				{
+					"name": "Create Course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"course 02\",\n  \"description\": \"course 02 description\",\n  \"duration\" : 5,\n  \"content\" : \"course 02 content\",\n  \"instructor\" : \"689ad8b781797dc972c845cd\"\n\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/course",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/course/689c35bef25763693329e6d0",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course",
+								"689c35bef25763693329e6d0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/course",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get courses instructor by token",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/course/instructor/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course",
+								"instructor",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get courses by instructorID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/course/instructor/689ad8b781797dc972c845cd",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course",
+								"instructor",
+								"689ad8b781797dc972c845cd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Student Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response",
+									"let jsonData = pm.response.json();",
+									"",
+									"// Save the token to environment",
+									"pm.environment.set(\"authToken\", jsonData.token);",
+									"",
+									"// Optional: confirm in console",
+									"console.log(\"Token stored:\", jsonData.token);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\" : \"student@gmail.com\",\n  \"password\" : \"student123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instructor Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response",
+									"let jsonData = pm.response.json();",
+									"",
+									"// Save the token to environment",
+									"pm.environment.set(\"authToken\", jsonData.token);",
+									"",
+									"// Optional: confirm in console",
+									"console.log(\"Token stored:\", jsonData.token);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\" : \"instructor@gmail.com\",\n  \"password\" : \"instructor123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Enrolled",
+			"item": [
+				{
+					"name": "Enroll in a course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/enrolled-course/689c35ff0c3077b195e9322e",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"enrolled-course",
+								"689c35ff0c3077b195e9322e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get enrolled ids",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/enrolled-course",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"enrolled-course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get enrolled student details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/enrolled-course/689c35ff0c3077b195e9322e/students",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"enrolled-course",
+								"689c35ff0c3077b195e9322e",
+								"students"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health check",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/health",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Role",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{authToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"roleName\": \"student\",\n  \"roleDescription\": \"Student\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/role",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"instructor\",\n  \"lastName\": \"instructor\",\n  \"contact\" : \"0712150138\",\n  \"email\" : \"instructor4@gmail.com\",\n  \"role\" : \"689ad8ac81797dc972c845ca\",\n  \"password\" : \"instructor123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/user/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080",
+			"type": "default"
+		}
+	]
+}
