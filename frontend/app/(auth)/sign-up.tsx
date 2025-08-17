@@ -92,7 +92,7 @@ export default function SignUp() {
       const user = handleLoginState(response);
       console.log(user);
       reset();
-      router.replace("/dashboard");
+      router.replace("/all-courses");
     },
     onError: (error) => {
       alert("Login Failed");

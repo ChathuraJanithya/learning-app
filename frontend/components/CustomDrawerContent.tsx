@@ -5,6 +5,7 @@ import {
 import { View, Text, TouchableOpacity } from "react-native";
 
 import { useAuth } from "@/context/AuthContext";
+import { LogOut } from "lucide-react-native";
 
 const CustomDrawerContent = (props: any) => {
   const { user, logOut } = useAuth();
@@ -30,8 +31,9 @@ const CustomDrawerContent = (props: any) => {
         {/* Logout button */}
         <TouchableOpacity
           onPress={logOut}
-          className="p-2 mt-3 bg-black rounded-md w-min"
+          className="flex flex-row items-center p-2 mt-3 rounded-md"
         >
+          <LogOut />
           <Text className="text-xs text-white">Logout</Text>
         </TouchableOpacity>
       </View>
