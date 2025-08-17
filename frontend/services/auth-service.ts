@@ -27,7 +27,7 @@ export const AuthService = {
     try {
       const response = await axios.post(`${BASE_URL}/user/signup`, body);
 
-      return response.data;
+      return response;
     } catch (error) {
       console.error(error);
       throw error;
