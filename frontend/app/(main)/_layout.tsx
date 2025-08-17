@@ -1,11 +1,9 @@
 import { Drawer } from "expo-router/drawer";
-import CustomHeader from "@/components/CustomHeader";
-import { Text, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { LayoutDashboard } from "lucide-react-native";
 import CustomDrawerContent from "@/components/CustomDrawerContent";
-import { CourseProvider } from "@/context/CourseContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import { useAuth } from "@/context/AuthContext";
+import { CourseProvider } from "@/context/CourseContext";
 
 export default function DashboardLayout() {
   const { user } = useAuth();

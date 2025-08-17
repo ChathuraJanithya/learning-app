@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, ScrollView } from "react-native";
 
 import { Course } from "@/types";
+
 import CourseCard from "@/components/CourseCard";
 import { useCourseContext } from "@/context/CourseContext";
 

@@ -1,9 +1,10 @@
 import React, { createContext, useContext, ReactNode } from "react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
-import CourseService from "@/services/course-service";
-import EnrolledCourseService from "@/services/enrolled-course-service";
 import { useMutation } from "@tanstack/react-query";
+
+import CourseService from "@/services/course-service";
 import { CourseResponse, EnrolledCourseResponse } from "@/types";
+import EnrolledCourseService from "@/services/enrolled-course-service";
 
 interface CourseContextType {
   courses: CourseResponse | undefined;
@@ -39,8 +40,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     ],
   });
 
-  // Create a Set for efficient lookup of enrolled courses.
-  // This logic should be placed outside the queries.
   const enrolledCourseIds = enrolledCourses?.data?.map(
     (item: EnrolledCourseResponse) => item.course
   );

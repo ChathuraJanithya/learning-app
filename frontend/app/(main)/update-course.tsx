@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { useEffect } from "react";
 import {
   ScrollView,
@@ -6,15 +5,19 @@ import {
   KeyboardAvoidingView,
   Text,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import InputField from "@/components/ui/InputField";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import CourseService from "@/services/course-service";
-import { Course } from "@/types";
-import { useLocalSearchParams } from "expo-router";
-import { useCourseContext } from "@/context/CourseContext";
 import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, Controller } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { Course } from "@/types";
+import CourseService from "@/services/course-service";
+import { useCourseContext } from "@/context/CourseContext";
+
+import InputField from "@/components/ui/InputField";
 
 export const courseSchema = z.object({
   title: z.string().min(1, "Title must be at least 1 characters"),

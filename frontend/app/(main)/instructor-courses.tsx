@@ -4,9 +4,11 @@ import { View, Text, ScrollView } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 
 import { Course } from "@/types";
-import CourseCard from "@/components/CourseCard";
-import { useCourseContext } from "@/context/CourseContext";
+
 import CourseService from "@/services/course-service";
+import { useCourseContext } from "@/context/CourseContext";
+
+import CourseCard from "@/components/CourseCard";
 
 export default function InstructorCourses() {
   const {

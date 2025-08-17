@@ -1,12 +1,15 @@
 // Example usage in a React Native component
 import React, { useState, useEffect, useRef } from "react";
+
 import { View, Text, Alert } from "react-native";
+
 import {
   getCourseSuggestionsFetch,
   closeAllFetchConnections,
 } from "@/services/course-suggestion-service";
-import InputField from "@/components/ui/InputField";
+
 import Button from "@/components/ui/Button";
+import InputField from "@/components/ui/InputField";
 
 const CourseSuggestionComponent = () => {
   const [prompt, setPrompt] = useState("");

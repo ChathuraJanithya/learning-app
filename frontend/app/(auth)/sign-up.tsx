@@ -1,16 +1,8 @@
 import { useState } from "react";
+import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import {
-  Eye,
-  EyeOff,
-  Lock,
-  ChevronDown,
-  UserCheck,
-  GraduationCap,
-  BookOpen,
-} from "lucide-react-native";
+
 import {
   KeyboardAvoidingView,
   SafeAreaView,
@@ -21,13 +13,25 @@ import {
   TextInput,
 } from "react-native";
 import { Link } from "expo-router";
-import InputField from "@/components/ui/InputField";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
 
 import { SignUpUser } from "@/types";
+
 import { useAuth } from "@/context/AuthContext";
 import { AuthService } from "@/services/auth-service";
+
+import InputField from "@/components/ui/InputField";
+
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  ChevronDown,
+  UserCheck,
+  GraduationCap,
+  BookOpen,
+} from "lucide-react-native";
 
 // Zod validation schema
 const signupSchema = z.object({

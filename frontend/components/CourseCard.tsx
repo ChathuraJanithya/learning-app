@@ -1,7 +1,9 @@
 import React from "react";
-import { Course } from "@/types";
 import { useNavigation } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
+
+import { Course } from "@/types";
+
 import { useAuth } from "@/context/AuthContext";
 
 interface CourseCardProps {

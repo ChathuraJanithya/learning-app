@@ -1,4 +1,3 @@
-// Fetch-based SSE implementation (more reliable than EventSource in React Native)
 import { BASE_URL } from "@/constants/server";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

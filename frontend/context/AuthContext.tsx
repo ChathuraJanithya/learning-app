@@ -5,8 +5,10 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { LoggedInUser, LoginResponse } from "@/types";
 
 interface AuthContextProps {
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsLoggedIn(true);
 
         // Navigate to Dashboard if credentials exist
-        router.replace("/dashboard");
+        router.replace("/all-courses");
       } else {
         // Navigate to Login if no credentials exist
         setIsLoggedIn(false);

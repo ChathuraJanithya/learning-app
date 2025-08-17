@@ -1,9 +1,10 @@
-import { useAuth } from "@/context/AuthContext";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { View, Text, TouchableOpacity } from "react-native";
+
+import { useAuth } from "@/context/AuthContext";
 
 const CustomDrawerContent = (props: any) => {
   const { user, logOut } = useAuth();

@@ -1,11 +1,14 @@
 import React from "react";
+import { studentDetails } from "@/types";
+
 import { useAuth } from "@/context/AuthContext";
+import { useCourseContext } from "@/context/CourseContext";
+
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { useCourseContext } from "@/context/CourseContext";
-import EnrolledCourseService from "@/services/enrolled-course-service";
 import { View, Text, ScrollView } from "react-native";
-import { studentDetails } from "@/types";
+
+import EnrolledCourseService from "@/services/enrolled-course-service";
 
 export default function CoursePage() {
   const { courseId, showInfo } = useLocalSearchParams();

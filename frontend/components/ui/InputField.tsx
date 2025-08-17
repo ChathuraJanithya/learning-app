@@ -52,6 +52,8 @@ const InputField: React.FC<InputFieldProps> = ({
         keyboardType={getType(type)}
         secureTextEntry={type === "password"}
         multiline={multiline}
+        {...(multiline && { numberOfLines: 4 })}
+        autoCapitalize="none"
       />
       {error ? <Text className="mt-1 text-red-500">{error}</Text> : null}
     </View>

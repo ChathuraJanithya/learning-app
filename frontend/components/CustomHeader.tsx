@@ -1,5 +1,6 @@
-import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, Text, View } from "react-native";
+
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 
 export default function CustomHeader() {
   const navigation = useNavigation();

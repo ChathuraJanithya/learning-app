@@ -8,20 +8,33 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
 import { Link } from "expo-router";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+
 import { LoggingUser } from "@/types";
-import { AuthService } from "@/services/auth-service";
+
 import { useAuth } from "@/context/AuthContext";
+import { AuthService } from "@/services/auth-service";
+
+import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import Button from "@/components/ui/Button";
+import InputField from "@/components/ui/InputField";
+
+import { Eye, EyeOff, Lock } from "lucide-react-native";
+
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function SignIn() {
   const router = useRouter();
   const { handleLoginState } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: loginMutation, isPending: isLoading } = useMutation({
@@ -29,19 +42,26 @@ export default function SignIn() {
     onSuccess: (response) => {
       const user = handleLoginState(response);
       console.log(user);
-      router.replace("/dashboard");
+      router.replace("/all-courses");
     },
     onError: (error) => {
       console.error("Login failed:", error);
       alert("Login Failed");
+      setError("Login Failed");
     },
   });
 
-  const handleLogin = () => {
-    const data = {
-      email,
-      password,
-    };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isDirty },
+  } = useForm<LoggingUser>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
+  });
+
+  const handleLogin = (data: LoggingUser) => {
+    setError(null);
     loginMutation(data);
   };
 
@@ -63,47 +83,55 @@ export default function SignIn() {
           </View>
 
           {/* Form */}
-          <View className="space-y-6">
+          <View className="flex flex-col gap-3 space-y-6">
             {/* Email Input */}
-            <View>
-              <Text className="mb-2 text-sm font-medium text-gray-700">
-                Email Address
-              </Text>
-              <View className="relative">
-                <View className="absolute z-10 left-4 top-4">
-                  <Mail size={20} color="#9CA3AF" />
-                </View>
-                <TextInput
-                  className="w-full px-12 py-4 text-base text-gray-900 border border-gray-200 bg-gray-50 rounded-xl focus:border-blue-500 focus:bg-white"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
+
+            <Controller
+              control={control}
+              render={({ field }) => (
+                <InputField
+                  {...field}
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  onBlur={field.onBlur}
+                  placeholder="Your First Name"
+                  error={errors.email?.message}
+                  label="Email"
                 />
-              </View>
-            </View>
+              )}
+              name="email"
+              rules={{ required: "You must enter your email" }}
+            />
 
             {/* Password Input */}
             <View>
-              <Text className="mb-2 text-sm font-medium text-gray-700">
+              <Text className="block mb-3 text-sm font-medium text-gray-700">
                 Password
               </Text>
               <View className="relative">
-                <View className="absolute z-10 left-4 top-4">
-                  <Lock size={20} color="#9CA3AF" />
+                <View className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <Lock className="w-5 h-5 text-gray-400" />
                 </View>
-                <TextInput
-                  className="w-full px-12 py-4 pr-12 text-base text-gray-900 border border-gray-200 bg-gray-50 rounded-xl focus:border-blue-500 focus:bg-white"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                  autoCapitalize="none"
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      className={`block w-full py-3  px-2 border rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:border-black focus:bg-white transition-colors ${
+                        errors.password ? "border-red-300" : "border-gray-200"
+                      }`}
+                      placeholder="Create a strong password"
+                      secureTextEntry={!showPassword}
+                      autoCapitalize="none"
+                      value={field.value}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
                 />
                 <TouchableOpacity
-                  className="absolute right-4 top-4"
+                  className="absolute right-4 top-3"
                   onPress={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -113,6 +141,11 @@ export default function SignIn() {
                   )}
                 </TouchableOpacity>
               </View>
+              {errors.password && (
+                <Text className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </Text>
+              )}
             </View>
 
             {/* Forgot Password */}
@@ -123,8 +156,14 @@ export default function SignIn() {
             </TouchableOpacity>
           </View>
 
+          {error && <Text className="mt-1 text-sm text-red-600">{error}</Text>}
+
           {/* Login Button */}
-          <Button styles={"mt-8 "} onPress={handleLogin} disabled={isLoading}>
+          <Button
+            styles={"mt-8 "}
+            onPress={handleSubmit(handleLogin)}
+            disabled={isLoading || !isDirty}
+          >
             <Text className="text-base font-semibold text-center text-white">
               {isLoading ? "Signing In..." : "Sign In"}
             </Text>
