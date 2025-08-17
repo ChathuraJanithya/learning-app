@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import { LoggingUser } from "@/types";
 import { AuthService } from "@/services/auth-service";
 import { useAuth } from "@/context/AuthContext";
+import Button from "@/components/ui/Button";
 
 export default function SignIn() {
   const router = useRouter();
@@ -123,15 +124,11 @@ export default function SignIn() {
           </View>
 
           {/* Login Button */}
-          <TouchableOpacity
-            className={`mt-8 bg-black rounded-xl py-4 ${isLoading ? "opacity-70" : ""}`}
-            onPress={handleLogin}
-            disabled={isLoading}
-          >
+          <Button styles={"mt-8 "} onPress={handleLogin} disabled={isLoading}>
             <Text className="text-base font-semibold text-center text-white">
               {isLoading ? "Signing In..." : "Sign In"}
             </Text>
-          </TouchableOpacity>
+          </Button>
         </View>
         <View className="flex-row justify-center mt-8">
           <Text className="text-gray-600">Don't have an account? </Text>

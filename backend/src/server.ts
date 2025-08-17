@@ -14,6 +14,7 @@ import userRouter from "@/api/routes/user-routes";
 import roleRouter from "@/api/routes/role-routes";
 import courseRouter from "@/api/routes/course-routes";
 import enrolledCourseRouter from "@/api/routes/enrolled-course-route";
+import courseSuggestionRouter from "@/api/routes/course-suggestion-route";
 
 const app = express();
 const PORT = process.env.PORT || "8090";
@@ -34,6 +35,7 @@ app.use("/user", userRouter);
 app.use("/role", roleRouter);
 app.use("/course", courseRouter);
 app.use("/enrolled-course", enrolledCourseRouter);
+app.use("/course-suggestion", courseSuggestionRouter);
 
 app.listen(PORT, () => {
   logger.info(`Server is up and running on ${PORT}`);

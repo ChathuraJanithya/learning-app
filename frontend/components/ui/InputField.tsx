@@ -11,6 +11,7 @@ interface InputFieldProps {
   error?: string;
   label?: string;
   type?: InputFieldType;
+  multiline?: boolean;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -21,6 +22,7 @@ const InputField: React.FC<InputFieldProps> = ({
   error,
   label,
   type = "text",
+  multiline = false,
 }) => {
   function getType(type: string) {
     switch (type) {
@@ -49,6 +51,7 @@ const InputField: React.FC<InputFieldProps> = ({
         placeholderTextColor="#999"
         keyboardType={getType(type)}
         secureTextEntry={type === "password"}
+        multiline={multiline}
       />
       {error ? <Text className="mt-1 text-red-500">{error}</Text> : null}
     </View>

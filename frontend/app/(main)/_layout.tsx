@@ -13,7 +13,7 @@ export default function DashboardLayout() {
     <CourseProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Drawer
-          initialRouteName="dashboard"
+          initialRouteName="all-courses"
           screenOptions={{
             headerShown: true,
             drawerActiveBackgroundColor: "black", // Selected item background
@@ -23,14 +23,11 @@ export default function DashboardLayout() {
           drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
           <Drawer.Screen
-            name="dashboard"
+            name="all-courses"
             options={{
-              header: () => <CustomHeader />,
-              drawerIcon: () => (
-                <View className="flex items-center justify-center">
-                  <LayoutDashboard className="text-white " size={14} />
-                </View>
-              ),
+              headerShown: true,
+              title: "All Courses",
+              drawerLabel: "All Courses",
             }}
           />
           {/* courseId route */}
@@ -84,11 +81,14 @@ export default function DashboardLayout() {
             }}
           />
           <Drawer.Screen
-            name="all-courses"
+            name="course-suggestion"
             options={{
               headerShown: true,
-              title: "All Courses",
-              drawerLabel: "All Courses",
+              drawerItemStyle: {
+                display: user?.role === "student" ? "flex" : "none",
+              },
+              title: "Course Suggestion",
+              drawerLabel: "Course Suggestions",
             }}
           />
         </Drawer>
