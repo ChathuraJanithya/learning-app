@@ -27,6 +27,7 @@ Before you begin, ensure you have the following installed on your system:
 
 ## 📂 Project Structure
 
+```bash
 ├── backend/
 │ ├── src/
 │ ├── .env.example
@@ -40,6 +41,7 @@ Before you begin, ensure you have the following installed on your system:
 ├── .env.example
 ├── package.json
 └── app.json
+```
 
 ---
 
@@ -60,22 +62,25 @@ pnpm install
 
 ### 2. Configure environment variables
 
+```bash
 MONGO_URI=<your_mongodb_connection_string>
 SECRET_KEY=<your_jwt_secret_key>
 OPENAI_API_KEY=<your_openai_api_key>
 PORT=<your_local_port>
+```
 
 ### 3. Run the server:
 
+```bash
 pnpm run dev
+```
 
 ### 4. Frontend Setup
 
 Open a new terminal, navigate to the frontend directory, install dependencies, and start the Expo development server.
 
-bash
-Copy
-Edit
+```bash
 cd frontend
 pnpm install
 npx expo start
+```
